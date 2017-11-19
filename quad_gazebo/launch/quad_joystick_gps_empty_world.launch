@@ -49,7 +49,7 @@
   </group>
   
   <!-- launch files -->
-  <include file="$(find manipulaor_control)/launch/manipulator_control.launch"/>
+  <include file="$(find quad_control)/launch/manipulator_control.launch"/>
   
 </launch>
 
