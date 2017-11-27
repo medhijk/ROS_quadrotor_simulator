@@ -239,7 +239,7 @@
 
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-      <robotNamespace>/simple_gripper</robotNamespace>
+      <robotNamespace>/manipulator</robotNamespace>
     </plugin>
   </gazebo>
 

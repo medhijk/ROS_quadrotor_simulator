@@ -176,6 +176,7 @@
     <joint name="palm_riser" type="prismatic">
       <axis xyz="0 0 1"/>
       <limit lower="0" upper="0.9" effort="2.5" velocity="1.0"/>
+      <origin rpy="0 0 0" xyz="0 0.025 0"/>
       <parent link="riser"/>
       <child link="palm"/>
     </joint>
