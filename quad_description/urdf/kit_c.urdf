@@ -4,6 +4,26 @@
 <!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
 <!-- =================================================================================== -->
 <robot name="quad" xmlns:xacro="http://ros.org/wiki/xacro">
+  <!-- Properties -->
+  <!-- "propeller" -->
+  <!-- [kg] -->
+  <!-- [m] -->
+  <!-- [m] -->
+  <!-- [kg] -->
+  <!-- [m] -->
+  <!-- [m] -->
+  <!-- [m] -->
+  <!-- [kg.m/s^2] -->
+  <!-- [m] -->
+  <!-- [s] -->
+  <!-- [s] -->
+  <!-- [rad/s] -->
+  <!-- Property Blocks -->
+  <!-- inertia of a single rotor, assuming it is a cuboid. Height=3mm, width=15mm -->
+  <!-- Included URDF Files -->
+  <!-- Main multirotor link -->
+  <!-- Rotor joint and link -->
+  <!-- Instantiate multirotor_base_macro once -->
   <link name="base_link"/>
   <joint name="base_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -44,6 +64,7 @@
   <gazebo reference="base_link">
     <material>Gazebo/DarkGrey</material>
   </gazebo>
+  <!-- Instantiate rotors -->
   <joint name="rotor_0_joint" type="continuous">
     <origin rpy="0 0 0" xyz="0.17 0 0.01"/>
     <axis xyz="0 0 1"/>
@@ -264,6 +285,7 @@
   <gazebo reference="rotor_3">
     <material>Gazebo/Grey</material>
   </gazebo>
+  <!-- Main gripper link -->
   <transmission name="tran1">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="palm_left_finger">
@@ -316,7 +338,7 @@
   </transmission>
   <gazebo>
     <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
-      <robotNamespace>/simple_gripper</robotNamespace>
+      <robotNamespace>/manipulator</robotNamespace>
     </plugin>
   </gazebo>
   <material name="blue">
@@ -329,7 +351,7 @@
     <color rgba="1 1 1 1"/>
   </material>
   <joint name="base1_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0 -0.1302"/>
+    <origin rpy="0 0 0" xyz="0.025 0 -0.25"/>
     <parent link="base_link"/>
     <child link="riser"/>
   </joint>
@@ -338,15 +360,17 @@
       <geometry>
         <box size="0.025 0.025 0.25"/>
       </geometry>
+      <origin rpy="0 0 0" xyz="-0.025 0.0 0.125"/>
       <material name="white"/>
     </visual>
     <collision>
       <geometry>
         <box size="0.025 0.025 0.25"/>
       </geometry>
+      <origin rpy="0 0 0" xyz="-0.025 0.0 0.125"/>
     </collision>
     <inertial>
-      <mass value="10"/>
+      <mass value="0.2"/>
       <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
     </inertial>
   </link>
@@ -365,7 +389,7 @@
       <origin rpy="0 0 0" xyz="0 0 2.0125"/>
     </collision>
     <inertial>
-      <mass value="0.5"/>
+      <mass value="0.1"/>
       <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
     </inertial>
   </link>
@@ -393,14 +417,14 @@
       <geometry>
         <box size="0.025 0.05 0.025"/>
       </geometry>
-      <origin rpy="0 0 1.5707" xyz="0.078 0.053 0.0125"/>
+      <origin rpy="0 0 1.5707" xyz="0.078 0.0405 0.0125"/>
       <material name="blue"/>
     </visual>
     <collision>
       <geometry>
         <box size="0.025 0.05 0.025"/>
       </geometry>
-      <origin rpy="0 0 1.5707" xyz="0.078 0.053 0.0125"/>
+      <origin rpy="0 0 1.5707" xyz="0.078 0.0405 0.0125"/>
     </collision>
     <inertial>
       <mass value="0.1"/>
@@ -431,14 +455,14 @@
       <geometry>
         <box size="0.025 0.05 0.025"/>
       </geometry>
-      <origin rpy="0 0 1.5707" xyz="0.078 -0.053 0.0125"/>
+      <origin rpy="0 0 1.5707" xyz="0.078 -0.0905 0.0125"/>
       <material name="blue"/>
     </visual>
     <collision>
       <geometry>
         <box size="0.025 0.05 0.025"/>
       </geometry>
-      <origin rpy="0 0 1.5707" xyz="0.078 -0.053 0.0125"/>
+      <origin rpy="0 0 1.5707" xyz="0.078 -0.0905 0.0125"/>
     </collision>
     <inertial>
       <mass value="0.1"/>
@@ -447,28 +471,28 @@
   </link>
   <joint name="palm_left_finger" type="revolute">
     <axis xyz="0 0 1"/>
-    <limit effort="2.5" lower="-0.4" upper="0.4" velocity="1.0"/>
+    <limit effort="2.5" lower="-0.2" upper="0.2" velocity="1.0"/>
     <origin rpy="0 0 0" xyz="0 -0.025 0"/>
     <parent link="palm"/>
     <child link="left_finger"/>
   </joint>
   <joint name="left_finger_tip" type="revolute">
     <axis xyz="0 0 1"/>
-    <limit effort="2.5" lower="-0.4" upper="0.4" velocity="1.0"/>
+    <limit effort="2.5" lower="-0.1" upper="0.1" velocity="1.0"/>
     <origin rpy="0 0 0" xyz="0 0.025 0"/>
     <parent link="left_finger"/>
     <child link="left_finger_tip"/>
   </joint>
   <joint name="palm_right_finger" type="revolute">
     <axis xyz="0 0 1"/>
-    <limit effort="2.5" lower="-0.4" upper="0.4" velocity="1.0"/>
+    <limit effort="2.5" lower="-0.2" upper="0.2" velocity="1.0"/>
     <origin rpy="0 0 0" xyz="0 0.025 0"/>
     <parent link="palm"/>
     <child link="right_finger"/>
   </joint>
   <joint name="right_finger_tip" type="revolute">
     <axis xyz="0 0 1"/>
-    <limit effort="2.5" lower="-0.4" upper="0.4" velocity="1.0"/>
+    <limit effort="2.5" lower="-0.1" upper="0.1" velocity="1.0"/>
     <origin rpy="0 0 0" xyz="0 0.025 0"/>
     <parent link="right_finger"/>
     <child link="right_finger_tip"/>
