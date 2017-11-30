@@ -48,31 +48,9 @@
     </node> 
   </group>
   
-  <!-- launch files --> <!--
-  <include file="$(find quad_control)/launch/manipulator_control.launch"/> -->
+  <!-- launch files -->
+  <include file="$(find quad_control)/launch/manipulator_control.launch"/>
   
 </launch>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

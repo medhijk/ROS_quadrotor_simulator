@@ -34,6 +34,7 @@
   <!-- Given the published joint states, publish tf for the robot links -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 
+<!--
   <group ns="quad">
     <node name="joy_node" pkg="joy" type="joy_node" />
     <node name="quad_joystick_interface" pkg="quad_joystick_interface" type="quad_joystick_interface" output="screen"/> 
@@ -47,32 +48,12 @@
       <rosparam command="load" file="$(find quad_control)/resource/attitude_controller.yaml" />  
     </node> 
   </group>
+
+-->
   
   <!-- launch files --> <!--
   <include file="$(find quad_control)/launch/manipulator_control.launch"/> -->
   
 </launch>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

@@ -6,11 +6,6 @@
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
     output="screen" ns="/manipulator" args=" joint_state_controller
                     manipulator_controller
-                    palm_riser_controller
-                    palm_left_finger_controller
-                    left_finger_tip_controller
-                    palm_right_finger_controller
-                    right_finger_tip_controller
 
                     
 "/>
