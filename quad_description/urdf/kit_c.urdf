@@ -326,16 +326,16 @@
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="tran5">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="palm_riser">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="motor5">
-      <hardwareInterface>PositionJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
+  <!--<transmission name="tran5">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="palm_riser">
+        <hardwareInterface>PositionJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="motor5">
+        <hardwareInterface>PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>-->
   <gazebo>
     <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
       <robotNamespace>/manipulator</robotNamespace>
@@ -497,9 +497,8 @@
     <parent link="right_finger"/>
     <child link="right_finger_tip"/>
   </joint>
-  <joint name="palm_riser" type="prismatic">
+  <joint name="palm_riser" type="fixed">
     <axis xyz="0 0 1"/>
-    <limit effort="2.5" lower="0" upper="0.1" velocity="1.0"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <parent link="riser"/>
     <child link="palm"/>
