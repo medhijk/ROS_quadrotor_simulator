@@ -243,21 +243,13 @@ void WaypointPublisherNode::OdometryCallback(const nav_msgs::OdometryConstPtr& o
     //Rotate into BF
     waypointBF = control_mode.rotateGFtoBF(threedNav_trajectory.position(0)-current_gps_.pose.pose.position.x, threedNav_trajectory.position(1)-current_gps_.pose.pose.position.y, threedNav_trajectory.position(2), 0, 0, gps_yaw);
 
-    if( (threedNav_trajectory.position(0)==0.0) && (threedNav_trajectory.position(1)==0.0) && (threedNav_trajectory.position(2)==0.0)){
-	desired_wp.position.x = current_gps_.pose.pose.position.x;
-    	desired_wp.position.y = current_gps_.pose.pose.position.y;
-    	desired_wp.position.z = current_gps_.pose.pose.position.z;
-    	desired_wp.yaw = gps_yaw;
-    }
-    else{
-    	//desired_wp.position.x = threedNav_trajectory.position(0);
-    	//desired_wp.position.y = threedNav_trajectory.position(1);
+    desired_wp.position.x = threedNav_trajectory.position(0);
+    desired_wp.position.y = threedNav_trajectory.position(1);
 
-    	desired_wp.position.x = (current_gps_.pose.pose.position.x + waypointBF(0));
-    	desired_wp.position.y = (current_gps_.pose.pose.position.y + waypointBF(1));
-    	desired_wp.position.z = threedNav_trajectory.position(2);    
-    	desired_wp.yaw = threedNav_trajectory.yaw;
-    }
+    //desired_wp.position.x = (current_gps_.pose.pose.position.x + waypointBF(0));
+    //desired_wp.position.y = (current_gps_.pose.pose.position.y + waypointBF(1));
+    desired_wp.position.z = threedNav_trajectory.position(2);    
+    desired_wp.yaw = threedNav_trajectory.yaw;
 
     desired_wp.jerk.x = 1;	//Set flag for position controller
 

@@ -127,6 +127,14 @@ $ cd $WORKSPACE/src
 $ git clone https://github.com/catkin/catkin_simple.git
 ```
 
+### Install the ROS Quadrotor Simulator package
+
+```
+$ cd $WORKSPACE/src
+$ git clone https://github.com/wilselby/ROS_quadrotor_simulator
+```
+ 
+
 ## Install rotors simulator
 RotorS is a UAV gazebo simulator developed by the Autonomous Systems Laboratory at ETH Zurich. It provides some multirotor models such as the AscTec Hummingbird, the AscTec Pelican, or the AscTec Firefly, but the simulator is not limited for the use with these multicopters. There are simulated sensors such as an IMU, a generic odometry sensor, and the VI-Sensor, which can be mounted on the multirotor. This packages also contains some example controllers, basic worlds, a joystick interface, and example launch files. This package will serve as the foundation for the rest of the software development as it is already set-up to interface with the Gazebo simulator.
 
@@ -178,12 +186,14 @@ See https://www.wilselby.com/research/ros-integration/model-dynamics-sensors/ fo
 A command line tool check_urdf attempts to parse a file as a URDF description, and either prints a description of the resulting kinematic chain, or an error message. The first command creates a urdf file from the xacro file.
 
 ```
+$ cd ros/catkin_ws/src/arducopter_slam/quad_description/urdf
 $ rosrun xacro xacro.py kit_c.xacro -o /tmp/kit_c.urdf
 ```
 
 Then run the urdf check:
 
 ```
+$ cd /tmp/
 $ check_urdf kit_c.urdf
 ```
 

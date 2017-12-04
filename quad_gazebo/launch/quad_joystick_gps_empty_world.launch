@@ -47,11 +47,9 @@
       <rosparam command="load" file="$(find quad_control)/resource/attitude_controller.yaml" />  
     </node> 
   </group>
-  
-  <!-- launch files -->
-  <include file="$(find quad_control)/launch/manipulator_control.launch"/>
-  
+
 </launch>
+
 
 
 
