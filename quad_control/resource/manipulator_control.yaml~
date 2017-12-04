@@ -16,29 +16,4 @@ manipulator:
   
   
   
-  # Position Controllers ---------------------------------------
-  palm_riser_controller:
-    type: effort_controllers/JointPositionController
-    joint: palm_riser
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  
-  palm_left_finger_controller:
-    type: effort_controllers/JointPositionController
-    joint: palm_left_finger
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  
-  left_finger_tip_controller:
-    type: effort_controllers/JointPositionController
-    joint: left_finger_tip
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  
-  palm_right_finger_controller:
-    type: effort_controllers/JointPositionController
-    joint: palm_right_finger
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  
-  right_finger_tip_controller:
-    type: effort_controllers/JointPositionController
-    joint: right_finger_tip
-    pid: {p: 100.0, i: 0.01, d: 10.0}
   

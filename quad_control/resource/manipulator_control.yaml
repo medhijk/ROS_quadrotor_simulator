@@ -8,7 +8,6 @@ manipulator:
   manipulator_controller:
     type: position_controllers/JointTrajectoryController
     joints:
-      - palm_riser
       - palm_left_finger
       - left_finger_tip
       - palm_right_finger
