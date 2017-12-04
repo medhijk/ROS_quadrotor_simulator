@@ -24,7 +24,7 @@ namespace quad_control {
 
 std::vector<quad_control::WaypointWithTime> WaypointWithTime::Read_waypoints(std::vector<quad_control::WaypointWithTime> waypoints){
 
-  std::ifstream wp_file("/home/wil/ros/catkin_ws/src/arducopter_slam/quad_control/resource/kitchen_short_waypoints.txt"); 
+  std::ifstream wp_file("/home/medhijk/catkin_ws/src/ROS_quadrotor_simulator/quad_control/resource/kitchen_short_waypoints.txt"); 
   //wg_waypoints.txt  kitchen_waypoints.txt
 
   if (wp_file.is_open()) {
