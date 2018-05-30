@@ -143,8 +143,12 @@
     <xacro:insert_block name="rotor_inertia" />
   </xacro:vertical_rotor>
   
-  <xacro:include filename="$(find quad_description)/urdf/my_gripper.xacro"/>
-  <my_gripper_macro/>
+    
+  <!--<xacro:include filename="$(find quad_description)/urdf/my_gripper.xacro"/>
+  <my_gripper_macro/>-->
+
+  <xacro:include filename="$(find quad_description)/urdf/balsa_arm.xacro"/>
+  <balsa_arm/>
 
 
 </robot>
