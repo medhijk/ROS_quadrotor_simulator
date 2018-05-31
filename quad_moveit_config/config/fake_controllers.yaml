@@ -1,0 +1,9 @@
+controller_list:
+  - name: fake_quad_base_controller
+    joints:
+      - virtual_joint
+  - name: fake_manipulator_controller
+    joints:
+      - shoulder
+      - elbow
+      - wrist
