@@ -10,7 +10,7 @@ Under that second terminal, make sure pyton file is executable
 chmod +x manipulator_move_group_python_interface.py
 
 After that, run the python script
-rosrun manipulator_planning balsa_arm_move_group_python_interface.py
+rosrun manipulator_planning manipulator_move_group_python_interface.py
 
 
 
