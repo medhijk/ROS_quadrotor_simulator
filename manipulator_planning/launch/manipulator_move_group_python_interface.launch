@@ -1,0 +1,6 @@
+<launch>
+
+  <node name="manipulator_move_group_python_interface" pkg="manipulator_planning" type="manipulator_move_group_python_interface.py" respawn="false" output="screen">
+  </node>
+
+</launch>
