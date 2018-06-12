@@ -51,7 +51,7 @@
     </node> 
   </group>
 
-  <!-- Spawn manipulator controllers -->
+  <!-- Spawn manipulator controllers
   <group ns="/manipulator">
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args=" joint_state_controller manipulator_controller">
       <rosparam command="load" file="$(find quad_control)/resource/manipulator_control.yaml" /> 
@@ -59,7 +59,7 @@
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
       <remap from="/joint_states" to="/manipulator/joint_states"/>
     </node>
-  </group>
+  </group>-->
   
   
   
