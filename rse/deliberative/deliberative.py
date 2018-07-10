@@ -2,6 +2,8 @@
 
 from check_force import call_ft
 from balsa_arm_move_group_python_interface import *
+from geometry_msgs.msg import Point
+from std_msgs.msg import String
 import rospy
 
 
@@ -12,7 +14,7 @@ class DeliberativeLayer(object):
         # Initialize rospy node
         rospy.init_node("deliberative_layer", anonymous=True)
         rospy.loginfo("Deliberative layer successfully started")
-        rospy.Subscriber("/gazebo/ft_sensor_topic", Wrench, self.call_ft)
+        """rospy.Subscriber("/gazebo/ft_sensor_topic", Wrench, self.call_ft)"""
 		
 		
 		self.state = 1
@@ -26,9 +28,32 @@ class DeliberativeLayer(object):
 		self.quad_limit_y = [-1000, 1000]
 		self.quad_limit_z = [-1000, 1000]
 		
-		arm_waypoint=[]
-		quad_waypoint=[]
+		self.arm_waypoint=[]
+		self.quad_waypoint=[]
+		
+		self.quad_str = String()
+		self.arm_str = String()
     
+	
+	# Communication setup
+	def communication (self)
+	    self.quad_delib_habit = rospy.Publisher("/quad/deliberative_to_habitual", Point, queue_size=10)
+		self.arm_delib_habit = rospy.Publisher("/arm/deliberative_to_habitual", Point, queue_size=10)
+		
+		self.quad_habit_delib = rospy.Subscriber("/quad/habitual_to_deliberative", String, self.quad_habitual_callback)
+		self.arm_habit_delib = rospy.Subscriber("/arm/habitual_to_deliberative", String, self.arm_habitual_callback)
+	
+	
+	# Callback functions
+	
+	def quad_habitual_callback(self, msg):
+        self.quad_str = msg
+	
+	def arm_habitual_callback(self, msg):
+        self.arm_str = msg
+
+
+	
 	def main(self):
 	    while not rospy.is_shutdown():
 		    self.state_machine()
@@ -107,17 +132,43 @@ class DeliberativeLayer(object):
 		    else:
 		        pass
 		
-		#Enact arm planning
+		#Enact arm planning (THIS FUNCTION SHOULD SEND THE ARM GOAL TO HABITUAL LAYER TO EXECUTE AND RETURN/SUBSCRIBE A SUCCESS MESSAGE)
 		def arm_plan_only(self):
-			    current_joint_values = group.get_current_joint_values()
-		        manipulator_move_group_python_interface.plan1()
-			    print "============ Waiting while RVIZ displays plan..."
-			    rospy.sleep(5)
-			    planned_joint_values = group.get_current_joint_values()
-			    if (current_joint_values == planned_joint_values):
-			        return True
-			    else:
-			        self.state == 3 # couldn't find a plan for arm
+		    
+			#global arm_waypoint
+			armgoalmsg = Point()
+			armgoalmsg.x = self.arm_waypoint[0]
+			armgoalmsg.y = self.arm_waypoint[1]
+			armgoalmsg.z = self.arm_waypoint[2]
+			self.arm_delib_habit.publish(armgoalmsg)
+			
+			"""
+			current_joint_values = group.get_current_joint_values()
+		    manipulator_move_group_python_interface.plan1()
+			print "============ Waiting while RVIZ displays plan..."
+		    rospy.sleep(5)
+		    planned_joint_values = group.get_current_joint_values()
+		    if (current_joint_values == planned_joint_values):
+                return True
+		    else:
+		        self.state == 3 # couldn't find a plan for arm
+			"""
+		
+		
+		#Enactquad planning (THIS FUNCTION SHOULD SEND THE QUAD GOAL TO HABITUAL LAYER TO EXECUTE AND RETURN/SUBSCRIBE A SUCCESS MESSAGE)
+		# or Enact quad planning
+		def quad_plan_only(self, waypt):
+		    self.waypt = waypt
+			
+			quadgoalmsg = Point()
+			quadgoalmsg.x = self.waypt[0]
+			quadgoalmsg.y = self.waypt[1]
+			quadgoalmsg.z = self.waypt[2]
+			self.quad_delib_habit.publish(quadgoalmsg)
+			#TODO
+			return True
+		
+		
 		
 		#######################################################
 		# TO DO 
@@ -128,11 +179,11 @@ class DeliberativeLayer(object):
 		#
 		
 		def end_effector_goal(self):
-		    global arm_waypoint
-			global arm_len
-			end_eff[0] = arm_waypoint[0]  #end effector goal
-			end_eff[1] = arm_waypoint[1]
-			end_eff[2] = arm_waypoint[2] + arm_len
+		    #global arm_waypoint
+			#global arm_len
+			end_eff[0] = self.arm_waypoint[0]  #end effector goal
+			end_eff[1] = self.arm_waypoint[1]
+			end_eff[2] = self.arm_waypoint[2] + self.arm_len
 			return end_eff
 		
 		#######################################################
@@ -159,18 +210,18 @@ class DeliberativeLayer(object):
 		def quad_waypoint_request(self):
 			quad_goal = input ("Do you have a new goal for UAV? \nEnter 'y' or 'n': ").lower()
 			if quad_goal == 'y':
-			    global quad_waypoint
+			    #global quad_waypoint
 				
 			    quad_x = float(input("enter quadrotor's goal: waypoint x-coordinate : "))
-				quad_waypoint.append(quad_x)
+				self.quad_waypoint.append(quad_x)
 				
 			    quad_y = float(input("enter quadrotor's goal: waypoint y-coordinate : "))
-				quad_waypoint.append(quad_y)
+				self.quad_waypoint.append(quad_y)
 				
 			    quad_z = float(input("enter quadrotor's goal: waypoint z-coordinate : "))
-				quad_waypoint.append(quad_z)
+				self.quad_waypoint.append(quad_z)
 			    
-			    print("Requested waypoint for quadrotor is :", quad_waypoint)
+			    print("Requested waypoint for quadrotor is :", self.quad_waypoint)
 				quad_waypoint_status = 1
 
 			elif quad_goal == 'n':
@@ -190,18 +241,18 @@ class DeliberativeLayer(object):
 		def arm_waypoint_request(self):
 			arm_goal = input ("Do you have a new goal for arm? \nEnter 'y' or 'n': ").lower()
 			if arm_goal == 'y':
-			    global arm_waypoint
+			    #global arm_waypoint
 				
 			    arm_x = float(input("enter arm's goal: waypoint x-coordinate : "))
-				arm_waypoint.append(arm_x)
+				self.arm_waypoint.append(arm_x)
 				
 			    arm_y = float(input("enter arm's goal: waypoint y-coordinate : "))
-				arm_waypoint.append(arm_y)
+				self.arm_waypoint.append(arm_y)
 				
 			    arm_z = float(input("enter arm's goal: waypoint z-coordinate : "))
-				arm_waypoint.append(arm_z)
+				self.arm_waypoint.append(arm_z)
 			    
-			    print("Requested waypoint for arm is :", arm_waypoint)
+			    print("Requested waypoint for arm is :", self.arm_waypoint)
 				arm_waypoint_status = 1
 
 			elif arm_goal == 'n':
@@ -232,11 +283,11 @@ class DeliberativeLayer(object):
 
 		def check_range_quad(self):
 		    ###
-			if (quad_waypoint[0] > self.quad_limit_x[0] and quad_waypoint[0] < self.quad_limit_x[1])
+			if (self.quad_waypoint[0] > self.quad_limit_x[0] and self.quad_waypoint[0] < self.quad_limit_x[1])
 			    quad_range_x = True
-			if (quad_waypoint[1] > self.quad_limit_y[0] and quad_waypoint[0] < self.quad_limit_y[1])
+			if (self.quad_waypoint[1] > self.quad_limit_y[0] and self.quad_waypoint[0] < self.quad_limit_y[1])
 			    quad_range_y = True
-			if (quad_waypoint[2] > self.quad_limit_z[0] and quad_waypoint[0] < self.quad_limit_z[1])
+			if (self.quad_waypoint[2] > self.quad_limit_z[0] and self.quad_waypoint[0] < self.quad_limit_z[1])
 			    quad_range_z = True
 			if quad_range_x and quad_range_y and quad_range_z:
 			    return 1
@@ -247,11 +298,11 @@ class DeliberativeLayer(object):
 		    
 			
 			###
-			if (arm_waypoint[0] > self.arm_limit_x[0] and arm_waypoint[0] < self.arm_limit_x[1])
+			if (self.arm_waypoint[0] > self.arm_limit_x[0] and self.arm_waypoint[0] < self.arm_limit_x[1])
 			    arm_range_x = True
-			if (arm_waypoint[1] > self.arm_limit_y[0] and arm_waypoint[0] < self.arm_limit_y[1])
+			if (self.arm_waypoint[1] > self.arm_limit_y[0] and self.arm_waypoint[0] < self.arm_limit_y[1])
 			    arm_range_y = True
-			if (arm_waypoint[2] > self.arm_limit_z[0] and arm_waypoint[0] < self.arm_limit_z[1])
+			if (self.arm_waypoint[2] > self.arm_limit_z[0] and self.arm_waypoint[0] < self.arm_limit_z[1])
 			    arm_range_z = True
 			if (arm_range_x and arm_range_y and arm_range_z):
 			    return 1
@@ -261,17 +312,17 @@ class DeliberativeLayer(object):
 
 		def arm_workspace(self):
 		    # TODO
-			# function to check if the arm end effector goal is wthin the arm's reach/workspace 
+			# function to check if the arm end effector goal is within the arm's reach/workspace 
 			
 			return 1
 		    
 			
 			###
-			if (arm_waypoint[0] > self.arm_limit_x[0] and arm_waypoint[0] < self.arm_limit_x[1])
+			if (self.arm_waypoint[0] > self.arm_limit_x[0] and self.arm_waypoint[0] < self.arm_limit_x[1])
 			    arm_range_x = True
-			if (arm_waypoint[1] > self.arm_limit_y[0] and arm_waypoint[0] < self.arm_limit_y[1])
+			if (self.arm_waypoint[1] > self.arm_limit_y[0] and self.arm_waypoint[0] < self.arm_limit_y[1])
 			    arm_range_y = True
-			if (arm_waypoint[2] > self.arm_limit_z[0] and arm_waypoint[0] < self.arm_limit_z[1])
+			if (self.arm_waypoint[2] > self.arm_limit_z[0] and self.arm_waypoint[0] < self.arm_limit_z[1])
 			    arm_range_z = True
 			if (arm_range_x and arm_range_y and arm_range_z):
 			    return 1
@@ -279,14 +330,15 @@ class DeliberativeLayer(object):
 
 		
 		# or Enact quad planning
-		def quad_plan_only:
+		def quad_plan_only(self, waypt):
 		    #TODO
 			return True
 			
 		
 		# or Enact quad+arm planning
-		def quad_arm_plan
+		def quad_arm_plan(self)
 		    #TODO
+			return True
 		
 		#Send enact plan message to HL
 	
@@ -294,6 +346,7 @@ class DeliberativeLayer(object):
         self.flag = check_force.flag
         pass
 
+"""
 	def moveit_execute(self):
         self.group = balsa_arm_move_group_python_interface.group()
         if (check_force_torque.flag == 0):
@@ -301,6 +354,7 @@ class DeliberativeLayer(object):
         else:
                 print("Too much force/torque.. cannot execute plan")
                 pass
+"""
 
 if __name__ == "__main__":
     try:
