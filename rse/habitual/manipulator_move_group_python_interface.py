@@ -125,9 +125,9 @@ class HabitualLayer(object):
 	group_variable_values = group.get_current_pose(eef_link)
 	
 	pose_goal = geometry_msgs.msg.Pose()
-	pose_goal.position.x = self.arm_point[0]
-	pose_goal.position.y = self.arm_point[1]
-	pose_goal.position.z = self.arm_point[2]
+	pose_goal.position.x = self.arm_point.x
+	pose_goal.position.y = self.arm_point.y
+	pose_goal.position.z = self.arm_point.z
 	group.set_pose_target(pose_goal)
 	
 	plan1 = group.plan()
